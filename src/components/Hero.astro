@@ -1,0 +1,284 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import LensDemo from './LensDemo.astro';
+
+const { t } = Astro.props;
+---
+
+<header class="hero" data-hero>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__texture" aria-hidden="true"></div>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <div class="wrap hero__inner">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/" class="logo" aria-label={t.nav.home}>
+        <Logo size={20} />
+        <span class="serif">Nitid</span>
+      </a>
+      <div class="nav__right">
+        <div class="nav__links">
+          <a href="#methode">{t.nav.method}</a>
+          <a href="#realisations">{t.nav.work}</a>
+          <a href="#questions">{t.nav.faq}</a>
+        </div>
+        <ThemeToggle toLight={t.nav.toLight} toDark={t.nav.toDark} />
+        <a class="pill" href="#contact">{t.nav.cta}</a>
+      </div>
+    </nav>
+
+    <div class="hero__body">
+      <h1 class="serif hero__title">
+        <span class="l1">{t.hero.line1}</span>
+        <span class="l2">{t.hero.line2a} <span class="nacre">{t.hero.line2b}</span></span>
+      </h1>
+
+      <div class="hero__row">
+        <div class="hero__copy">
+          <p class="hero__lead">{t.hero.lead}</p>
+          <div class="hero__actions">
+            <a class="btn" href="#contact">{t.hero.cta}</a>
+            <a class="hero__more" href="#methode">{t.hero.secondary}</a>
+          </div>
+          <p class="hero__trust"><span aria-hidden="true"></span>{t.hero.trust}</p>
+        </div>
+        <LensDemo label={t.hero.demoLabel} hintHover={t.hero.hintHover} hintTouch={t.hero.hintTouch} fictional={t.hero.fictional} />
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    --hx: 72%;
+    --hy: 16%;
+    --ix: 0px;
+    --iy: 0px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--hero-bg);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--horizon);
+  }
+  .hero__glow {
+    position: absolute;
+    left: var(--hx);
+    top: var(--hy);
+    width: 1000px;
+    height: 1000px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--glow);
+    mix-blend-mode: var(--glow-blend);
+    transition: left 1.4s cubic-bezier(0.2, 0.7, 0.2, 1), top 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    pointer-events: none;
+    z-index: -3;
+  }
+  .hero__texture {
+    position: absolute;
+    inset: -4%;
+    background-image: var(--texture);
+    background-size: var(--texture-size);
+    background-repeat: var(--texture-repeat);
+    background-position: center;
+    opacity: var(--texture-opacity);
+    mix-blend-mode: var(--texture-blend);
+    transform: translate3d(var(--ix), var(--iy), 0);
+    transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+    pointer-events: none;
+    z-index: -2;
+  }
+  .hero__grain {
+    position: absolute;
+    inset: 0;
+    background: url('/textures/grain.webp');
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hero__inner {
+    padding-block: 28px clamp(72px, 9vw, 112px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 7vw, 84px);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .logo .serif {
+    font-size: 28px;
+    letter-spacing: 0.05em;
+  }
+  .nav__right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 28px;
+  }
+  .nav__links {
+    display: flex;
+    gap: 28px;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  .nav__links a {
+    color: var(--fg-2);
+    text-decoration: none;
+  }
+  .nav__links a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 760px) {
+    .nav__links {
+      display: none;
+    }
+    .nav__right {
+      gap: 10px;
+    }
+  }
+  @media (max-width: 420px) {
+    .pill {
+      padding: 0 14px;
+      font-size: 13px;
+    }
+    .logo .serif {
+      font-size: 24px;
+    }
+  }
+
+  .hero__body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(44px, 5vw, 64px);
+  }
+  .hero__title {
+    margin: 0;
+    font-size: clamp(46px, 8vw, 128px);
+    line-height: 0.96;
+    letter-spacing: -0.02em;
+    text-shadow: var(--title-shadow);
+  }
+  .hero__title > span {
+    display: block;
+  }
+  .hero__title .l2 {
+    padding-left: clamp(0px, 13vw, 210px);
+  }
+  .nacre {
+    font-style: italic;
+    font-weight: 400;
+    padding-right: 0.1em;
+    margin-right: -0.1em;
+    background: var(--nacre);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+  }
+  @keyframes rise {
+    from {
+      filter: blur(16px);
+      opacity: 0.05;
+      transform: translateY(0.28em);
+    }
+    to {
+      filter: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes sheen {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 100% 50%;
+    }
+  }
+  .hero__title .l1 {
+    animation: rise 1.6s cubic-bezier(0.2, 0.7, 0.1, 1) 0.15s both;
+  }
+  .hero__title .l2 {
+    animation: rise 1.6s cubic-bezier(0.2, 0.7, 0.1, 1) 0.4s both;
+  }
+  .nacre {
+    animation: sheen 6s ease-in-out 2s 2 alternate both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__title .l1,
+    .hero__title .l2,
+    .nacre {
+      animation: none;
+    }
+  }
+
+  .hero__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 56px 72px;
+    align-items: center;
+  }
+  .hero__copy {
+    flex: 1 1 320px;
+    min-width: 0;
+    max-width: 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .hero__lead {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--fg-2);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 26px;
+    align-items: center;
+  }
+  .hero__more {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .hero__trust {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .hero__trust span {
+    flex: none;
+    width: 28px;
+    height: 1px;
+    background: var(--step-line);
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+const { t } = Astro.props;
+---
+
+<section id="questions" class="section faq" aria-labelledby="questions-titre">
+  <div class="wrap faq__inner">
+    <h2 id="questions-titre" class="serif h2" data-reveal>{t.faq.title}</h2>
+    <div class="faq__list" data-reveal>
+      {
+        t.faq.items.map((it: { q: string; a: string }) => (
+          <details>
+            <summary>
+              <span>{it.q}</span>
+              <span class="faq__icon" aria-hidden="true" />
+            </summary>
+            <p>{it.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    background: var(--bg);
+  }
+  .faq__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 80px;
+    align-items: flex-start;
+  }
+  .faq h2 {
+    flex: 1 1 300px;
+    min-width: 0;
+  }
+  .faq__list {
+    flex: 1.6 1 480px;
+    min-width: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  details {
+    border-bottom: 1px solid var(--line-strong);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 0;
+    font-size: 19px;
+    font-weight: 400;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    color: var(--accent);
+  }
+  .faq__icon {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+  details[open] .faq__icon::after {
+    transform: rotate(0deg);
+  }
+  details p {
+    margin: 0;
+    padding: 0 40px 26px 0;
+    max-width: 640px;
+    color: var(--muted);
+  }
+</style>

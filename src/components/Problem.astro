@@ -1,0 +1,64 @@
+---
+const { t } = Astro.props;
+---
+
+<section class="section problem" aria-labelledby="probleme-titre">
+  <div class="wrap problem__inner">
+    <h2 id="probleme-titre" class="serif h2" data-reveal>{t.problem.title}</h2>
+    <ul class="problem__list">
+      {
+        t.problem.items.map((it: { t: string; d: string }) => (
+          <li data-reveal>
+            <h3>{it.t}</h3>
+            <p>{it.d}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .problem {
+    background: var(--bg);
+  }
+  .problem__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .problem h2 {
+    max-width: 860px;
+  }
+  .problem__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 40px;
+  }
+  .problem__list li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .problem__list li:nth-child(2) {
+    transition-delay: 0.12s;
+  }
+  .problem__list li:nth-child(3) {
+    transition-delay: 0.24s;
+  }
+  h3 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

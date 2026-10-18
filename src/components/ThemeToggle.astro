@@ -1,0 +1,55 @@
+---
+interface Props {
+  toLight: string;
+  toDark: string;
+}
+const { toLight, toDark } = Astro.props;
+---
+
+<button class="theme" type="button" data-theme-toggle data-to-light={toLight} data-to-dark={toDark} aria-label={toLight} title={toLight}>
+  <!-- Soleil : visible en mode sombre (pour passer en clair) -->
+  <svg class="theme__sun" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path>
+  </svg>
+  <!-- Lune : visible en mode clair (pour revenir au sombre) -->
+  <svg class="theme__moon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .theme:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .theme svg {
+    grid-area: 1 / 1;
+    transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .theme__moon {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.6);
+  }
+  :global([data-theme='light']) .theme__sun {
+    opacity: 0;
+    transform: rotate(60deg) scale(0.6);
+  }
+  :global([data-theme='light']) .theme__moon {
+    opacity: 1;
+    transform: none;
+  }
+</style>

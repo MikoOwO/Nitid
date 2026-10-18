@@ -1,0 +1,46 @@
+---
+import Base from './Base.astro';
+import Logo from '../components/Logo.astro';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<Base lang="fr" title={`${title} · Nitid`} description={`${title} du site nitid.ch.`}>
+  <main id="main" class="legal wrap">
+    <a href="/" class="legal__home"><Logo size={18} /><span class="serif">Nitid</span></a>
+    <h1 class="serif">{title}</h1>
+    <div class="legal__body"><slot /></div>
+  </main>
+</Base>
+
+<style>
+  .legal {
+    padding-block: 32px 96px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .legal__home {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-size: 24px;
+  }
+  h1 {
+    margin: 72px 0 32px;
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.05;
+  }
+  .legal__body :global(h2) {
+    margin: 40px 0 10px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .legal__body :global(p) {
+    margin: 0 0 12px;
+    color: var(--fg-2);
+  }
+</style>

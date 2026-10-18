@@ -1,0 +1,143 @@
+---
+const { t } = Astro.props;
+---
+
+<section id="methode" class="section method" aria-labelledby="methode-titre">
+  <div class="wrap method__inner">
+    <h2 id="methode-titre" class="serif h2" data-reveal>{t.method.title}</h2>
+    <ol class="steps" data-steps>
+      {
+        t.method.steps.map((s: { tag: string; t: string; d: string }, i: number) => (
+          <li class="step" data-step>
+            <span class="step__num serif" aria-hidden="true">{i + 1}</span>
+            <div class="step__body">
+              <span class="tag">{s.tag}</span>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </div>
+            <span class="step__line" aria-hidden="true" />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .method {
+    background: var(--section-bg);
+  }
+  .method__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 56px 80px;
+    align-items: flex-start;
+  }
+  .method h2 {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+  .steps {
+    flex: 1.5 1 480px;
+    min-width: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .step {
+    position: relative;
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .step__num {
+    flex: none;
+    width: 72px;
+    font-weight: 400;
+    font-size: 84px;
+    line-height: 0.85;
+    background: var(--num);
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: background-position 1.6s ease;
+  }
+  .step__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .step__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--step-line);
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+  }
+  @media (max-width: 520px) {
+    .step {
+      gap: 20px;
+    }
+    .step__num {
+      width: 48px;
+      font-size: 64px;
+    }
+  }
+
+  /* Apparition une par une au scroll (classe .is-in posée par le script). */
+  :global(.js) .step {
+    opacity: 0.2;
+    filter: blur(10px);
+    transform: translateY(20px);
+    transition: opacity 0.9s ease, filter 0.9s ease, transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  :global(.js) .step .step__line {
+    transform: scaleX(0);
+  }
+  :global(.js) .step .step__num {
+    background-position: 100% 50%;
+  }
+  :global(.js) .step:global(.is-in) {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  :global(.js) .step:global(.is-in) .step__line {
+    transform: scaleX(1);
+  }
+  :global(.js) .step:global(.is-in) .step__num {
+    background-position: 0% 50%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .step,
+    :global(.js) .step .step__line,
+    :global(.js) .step .step__num {
+      opacity: 1;
+      filter: none;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

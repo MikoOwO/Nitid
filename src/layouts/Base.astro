@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  lang: string;
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { lang, title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://nitid.ch');
+---
+
+<!doctype html>
+<html lang={lang} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0b1633" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nitid" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="fr_CH" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Thème : sombre par défaut, clair si le visiteur l'a choisi. Appliqué avant l'affichage. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var saved = localStorage.getItem('nitid-theme');
+          if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+        } catch (e) {}
+        if (root.getAttribute('data-theme') === 'light') {
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', '#e6e9ec');
+        }
+        root.classList.add('js');
+        // Filet de sécurité : si les scripts ne démarrent pas, tout le contenu reste visible.
+        setTimeout(function () {
+          if (!window.__nitid) root.classList.remove('js');
+        }, 3000);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Aller au contenu</a>
+    <slot />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

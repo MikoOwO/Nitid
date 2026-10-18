@@ -1,0 +1,78 @@
+---
+const { t } = Astro.props;
+---
+
+<section class="section why" aria-labelledby="pourquoi-titre">
+  <div class="wrap why__inner">
+    <div class="why__head" data-reveal>
+      <h2 id="pourquoi-titre" class="serif h2">{t.why.title}</h2>
+      <p class="why__lead">{t.why.lead}</p>
+    </div>
+    <dl class="why__list">
+      {
+        t.why.items.map((it: { t: string; d: string }, i: number) => (
+          <div data-reveal style={`transition-delay:${i * 0.08}s`}>
+            <dt>{it.t}</dt>
+            <dd>{it.d}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .why {
+    background: var(--section-bg);
+  }
+  .why__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 80px;
+    align-items: flex-start;
+  }
+  .why__head {
+    flex: 1 1 340px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .why__lead {
+    margin: 0;
+    max-width: 440px;
+    font-size: 19px;
+    color: var(--fg-2);
+  }
+  .why__list {
+    flex: 1.3 1 440px;
+    min-width: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .why__list div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 8px 32px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .why__list div:first-child {
+    border-top: 1px solid var(--line);
+  }
+  dt {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  dd {
+    margin: 0;
+    color: var(--muted);
+  }
+  @media (max-width: 560px) {
+    .why__list div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
