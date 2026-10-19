@@ -1,5 +1,5 @@
 // Nitid — interactions légères, sans librairie (≈ 3 Ko).
-// Thème, lumière du titre, loupe, apparitions au scroll, formulaire.
+// Thème, lumière du titre, démo « le plan qui devient site », apparitions au scroll, formulaire.
 
 declare global {
   interface Window {
@@ -73,61 +73,45 @@ if (hero && canHover && !reduceMotion) {
   });
 }
 
-/* ---------- Loupe ---------- */
+/* ---------- Démo : le plan qui devient site ---------- */
 
-const lens = document.querySelector<HTMLElement>('[data-lens]');
-let userMovedLens = false;
-let demoRaf = 0;
+const bp = document.querySelector<HTMLElement>('[data-bp]');
+const phaseTabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-go]'));
+let demoTimers: number[] = [];
 
-function setLens(x: number, y: number) {
-  if (!lens) return;
-  lens.style.setProperty('--lx', `${x.toFixed(1)}%`);
-  lens.style.setProperty('--ly', `${y.toFixed(1)}%`);
+function setPhase(phase: string) {
+  if (!bp) return;
+  bp.dataset.phase = phase;
+  phaseTabs.forEach((tab) => tab.setAttribute('aria-pressed', String(tab.dataset.go === phase)));
 }
 
-if (lens) {
-  const move = frame((x: number, y: number) => setLens(x, y));
-  lens.addEventListener('pointermove', (e) => {
-    userMovedLens = true;
-    if (demoRaf) cancelAnimationFrame(demoRaf);
-    const r = lens.getBoundingClientRect();
-    const x = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
-    const y = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
-    move(x, y);
-  });
+function stopDemo() {
+  demoTimers.forEach((id) => clearTimeout(id));
+  demoTimers = [];
 }
 
-// Petite démonstration automatique la première fois que la loupe est visible (utile sur mobile).
-function playLensDemo() {
-  if (!lens || userMovedLens || reduceMotion) return;
-  const pts: [number, number][] = [
-    [38, 50],
-    [68, 34],
-    [56, 66],
-    [38, 50],
-  ];
-  const dur = [1000, 850, 900];
-  let k = 0;
-  const leg = () => {
-    if (userMovedLens || k >= dur.length) return;
-    const [ax, ay] = pts[k];
-    const [bx, by] = pts[k + 1];
-    const ms = dur[k];
-    const t0 = performance.now();
-    const tick = (now: number) => {
-      if (userMovedLens) return;
-      const t = Math.max(0, Math.min(1, (now - t0) / ms));
-      const s = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      setLens(ax + (bx - ax) * s, ay + (by - ay) * s);
-      if (t < 1) demoRaf = requestAnimationFrame(tick);
-      else {
-        k += 1;
-        leg();
-      }
-    };
-    demoRaf = requestAnimationFrame(tick);
-  };
-  setTimeout(leg, 1400);
+// Avant (0,6 s) → plan tracé (≈ 2,2 s) → site. Rejoue à chaque retour dans l'écran.
+function playDemo() {
+  if (!bp) return;
+  stopDemo();
+  if (reduceMotion) {
+    setPhase('site');
+    return;
+  }
+  setPhase('old');
+  demoTimers.push(window.setTimeout(() => setPhase('plan'), 600));
+  demoTimers.push(window.setTimeout(() => setPhase('site'), 2800));
+}
+
+if (bp) {
+  if (!reduceMotion) setPhase('old');
+  phaseTabs.forEach((tab) =>
+    tab.addEventListener('click', () => {
+      stopDemo();
+      setPhase(tab.dataset.go ?? 'site');
+    }),
+  );
+  document.querySelector('[data-replay]')?.addEventListener('click', playDemo);
 }
 
 /* ---------- Apparitions au scroll ---------- */
@@ -154,7 +138,7 @@ function showEverything() {
 
 if (reduceMotion || !('IntersectionObserver' in window)) {
   showEverything();
-  playLensDemo();
+  playDemo();
 } else {
   const io = new IntersectionObserver(
     (entries) => {
@@ -166,8 +150,6 @@ if (reduceMotion || !('IntersectionObserver' in window)) {
         if (i >= 0) {
           for (let j = 0; j <= i; j += 1) seen[j] = true;
           pump();
-        } else if (el === lens) {
-          playLensDemo();
         } else {
           el.classList.add('is-in');
         }
@@ -177,7 +159,24 @@ if (reduceMotion || !('IntersectionObserver' in window)) {
   );
   document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
   steps.forEach((el) => io.observe(el));
-  if (lens) io.observe(lens);
+
+  // La démo se lance seule dès qu'elle est visible, et rejoue quand on y revient.
+  if (bp) {
+    let visible = false;
+    new IntersectionObserver(
+      ([en]) => {
+        if (en.isIntersecting && !visible) {
+          visible = true;
+          playDemo();
+        } else if (!en.isIntersecting && visible) {
+          visible = false;
+          stopDemo();
+          setPhase('site');
+        }
+      },
+      { threshold: 0.35 },
+    ).observe(bp);
+  }
 }
 
 /* ---------- Formulaire ---------- */

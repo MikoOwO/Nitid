@@ -25,7 +25,7 @@ src/
   styles/global.css     couleurs des deux modes, typographie, boutons
   layouts/Base.astro    <head>, thème appliqué avant l'affichage
   components/           une section = un composant (Hero, Method, Faq, Contact…)
-  scripts/site.ts       thème, lumière, loupe, apparitions au scroll, formulaire
+  scripts/site.ts       thème, lumière, démo du plan, apparitions au scroll, formulaire
   pages/                index, mentions légales, confidentialité
 public/
   fonts/                sous-ensembles woff2 (scripts/make_fonts.py)

@@ -26,9 +26,10 @@ export default {
     secondary: 'Voir comment ça marche',
     trust: 'Conçu en Suisse pour les Suisses.',
     demoLabel:
-      'Démonstration : le site daté et flou d’une menuiserie fictive et, sous la loupe, sa nouvelle version nette',
-    hintHover: 'Survolez pour voir l’après.',
-    hintTouch: 'Glissez pour voir l’après.',
+      'Démonstration : le site daté d’une menuiserie fictive devient un plan, puis un nouveau site net',
+    phases: ['Avant', 'Plan', 'Site'],
+    replay: 'Rejouer',
+    caption: 'Votre site actuel, notre plan, votre nouveau site.',
     fictional: 'Entreprise fictive, pour la démonstration',
   },
   problem: {
