@@ -4,7 +4,7 @@ const { t } = Astro.props;
 
 <section class="section about" aria-labelledby="equipe-titre">
   <div class="wrap about__inner" data-reveal>
-    <h2 id="equipe-titre" class="serif h2">{t.about.title}</h2>
+    <h2 id="equipe-titre" class="serif h2"><span class="wide">{t.about.title}</span></h2>
     <div class="about__text">
       <p>{t.about.text}</p>
       <a href={t.about.linkUrl} target="_blank" rel="noopener">{t.about.link} <span aria-hidden="true">↗</span></a>

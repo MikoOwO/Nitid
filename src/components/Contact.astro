@@ -11,7 +11,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
   <div class="wrap contact__inner">
     <div class="contact__grid">
       <div class="contact__intro" data-reveal>
-        <h2 id="contact-titre" class="serif h2">{t.contact.title}</h2>
+        <h2 id="contact-titre" class="serif h2"><span class="wide">{t.contact.title}</span></h2>
         <p>{t.contact.lead}</p>
         <div class="contact__direct">
           <span>{t.contact.direct}</span>
@@ -63,7 +63,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 
     <footer class="footer">
       <span class="footer__brand">
-        <span class="footer__logo"><Logo size={17} /><span class="serif">Nitid</span></span>
+        <span class="footer__logo"><Logo size={17} /><span class="serif wide-inline">Nitid</span></span>
         <span>{t.footer.signature}</span>
       </span>
       <span class="footer__links">
@@ -235,8 +235,10 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     color: var(--contact-fg);
   }
   .footer__logo .serif {
-    font-size: 20px;
-    letter-spacing: 0.05em;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    /* place pour les 20 % d'élargissement */
+    margin-right: 0.5em;
   }
   .footer a {
     color: var(--contact-muted);

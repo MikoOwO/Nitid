@@ -1,6 +1,6 @@
-"""Sous-ensembles des polices (Bodoni Moda, Jost) pour un chargement rapide.
+"""Sous-ensembles des polices (Instrument Serif, Jost) pour un chargement rapide.
 
-Source : paquets @fontsource-variable (licence SIL OFL 1.1).
+Source : paquets @fontsource et @fontsource-variable (licence SIL OFL 1.1).
 Usage : npm install && python3 scripts/make_fonts.py
 """
 from pathlib import Path
@@ -10,7 +10,7 @@ from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC_BODONI = ROOT / "node_modules/@fontsource-variable/bodoni-moda/files"
+SRC_SERIF = ROOT / "node_modules/@fontsource/instrument-serif/files"
 SRC_JOST = ROOT / "node_modules/@fontsource-variable/jost/files"
 OUT = ROOT / "public/fonts"
 
@@ -24,16 +24,16 @@ LATIN = (
 # minuscules, accents et ponctuation suffisent.
 ITALIC = "U+0020,U+002E,U+0061-007A,U+00DF-00FF,U+0153,U+2019"
 
-# Bodoni ne sert qu'aux grands titres : la taille optique est figée à 80 (gain de poids),
-# la graisse reste variable entre 400 et 700.
+# Instrument Serif ne sert qu'aux titres. Elle n'existe qu'en une graisse (400) et n'est pas
+# variable : aucun axe à figer (None).
 JOBS = [
-    (SRC_BODONI / "bodoni-moda-latin-opsz-normal.woff2", "bodoni-moda.woff2", LATIN, {"opsz": 80, "wght": (400, 700)}),
-    (SRC_BODONI / "bodoni-moda-latin-opsz-italic.woff2", "bodoni-moda-italic.woff2", ITALIC, {"opsz": 80, "wght": (400, 500)}),
+    (SRC_SERIF / "instrument-serif-latin-400-normal.woff2", "instrument-serif.woff2", LATIN, None),
+    (SRC_SERIF / "instrument-serif-latin-400-italic.woff2", "instrument-serif-italic.woff2", ITALIC, None),
     (SRC_JOST / "jost-latin-wght-normal.woff2", "jost.woff2", LATIN, {"wght": (300, 500)}),
 ]
 
 
-def run(src: Path, dst: Path, unicodes: str, axes: dict) -> None:
+def run(src: Path, dst: Path, unicodes: str, axes: dict | None) -> None:
     opts = subset.Options()
     opts.flavor = "woff2"
     opts.layout_features = ["kern", "liga", "clig", "calt", "onum", "lnum", "tnum", "pnum"]
@@ -43,7 +43,8 @@ def run(src: Path, dst: Path, unicodes: str, axes: dict) -> None:
     sub = subset.Subsetter(opts)
     sub.populate(unicodes=subset.parse_unicodes(unicodes))
     sub.subset(font)
-    font = instancer.instantiateVariableFont(font, axes)
+    if axes:
+        font = instancer.instantiateVariableFont(font, axes)
     font.flavor = "woff2"
     subset.save_font(font, str(dst), opts)
     print(f"{dst.name}: {src.stat().st_size // 1024} KB -> {dst.stat().st_size // 1024} KB")

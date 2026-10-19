@@ -4,7 +4,7 @@
 
 - Mode sombre par défaut (direction Nocturne), mode clair en option (direction Titane), mémorisé dans le navigateur.
 - Site statique Astro : aucune librairie côté navigateur, environ 180 Ko au total sur mobile (polices et textures comprises).
-- Polices auto-hébergées (Bodoni Moda pour les titres, Jost pour le texte) : aucune requête vers Google.
+- Polices auto-hébergées (Instrument Serif pour les titres, Jost pour le texte) : aucune requête vers Google.
 
 ## Démarrer
 
