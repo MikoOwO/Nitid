@@ -4,7 +4,7 @@
 
 - Mode sombre par défaut (direction Nocturne), mode clair en option (direction Titane), mémorisé dans le navigateur.
 - Site statique Astro : aucune librairie côté navigateur, environ 180 Ko au total sur mobile (polices et textures comprises).
-- Polices auto-hébergées (Bodoni Moda pour les titres, Jost pour le texte) : aucune requête vers Google.
+- Polices auto-hébergées (Instrument Serif pour les titres, Jost pour le texte) : aucune requête vers Google.
 
 ## Démarrer
 
@@ -25,7 +25,7 @@ src/
   styles/global.css     couleurs des deux modes, typographie, boutons
   layouts/Base.astro    <head>, thème appliqué avant l'affichage
   components/           une section = un composant (Hero, Method, Faq, Contact…)
-  scripts/site.ts       thème, lumière, loupe, apparitions au scroll, formulaire
+  scripts/site.ts       thème, lumière, démo du plan, apparitions au scroll, formulaire
   pages/                index, mentions légales, confidentialité
 public/
   fonts/                sous-ensembles woff2 (scripts/make_fonts.py)

@@ -4,12 +4,12 @@ const { t } = Astro.props;
 
 <section id="methode" class="section method" aria-labelledby="methode-titre">
   <div class="wrap method__inner">
-    <h2 id="methode-titre" class="serif h2" data-reveal>{t.method.title}</h2>
+    <h2 id="methode-titre" class="serif h2" data-reveal><span class="wide">{t.method.title}</span></h2>
     <ol class="steps" data-steps>
       {
         t.method.steps.map((s: { tag: string; t: string; d: string }, i: number) => (
           <li class="step" data-step>
-            <span class="step__num serif" aria-hidden="true">{i + 1}</span>
+            <span class="step__num serif wide-inline" aria-hidden="true">{i + 1}</span>
             <div class="step__body">
               <span class="tag">{s.tag}</span>
               <h3>{s.t}</h3>
@@ -58,8 +58,8 @@ const { t } = Astro.props;
     flex: none;
     width: 72px;
     font-weight: 400;
-    font-size: 84px;
-    line-height: 0.85;
+    font-size: 92px;
+    line-height: 0.82;
     background: var(--num);
     background-size: 220% 100%;
     background-position: 0% 50%;
@@ -102,7 +102,7 @@ const { t } = Astro.props;
     }
     .step__num {
       width: 48px;
-      font-size: 64px;
+      font-size: 70px;
     }
   }
 
@@ -132,11 +132,14 @@ const { t } = Astro.props;
   }
   @media (prefers-reduced-motion: reduce) {
     :global(.js) .step,
-    :global(.js) .step .step__line,
-    :global(.js) .step .step__num {
+    :global(.js) .step .step__line {
       opacity: 1;
       filter: none;
       transform: none;
+      transition: none;
+    }
+    /* le numéro garde son élargissement (transform), seule la transition saute */
+    :global(.js) .step .step__num {
       transition: none;
     }
   }

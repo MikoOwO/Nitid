@@ -15,7 +15,7 @@ const { t } = Astro.props;
     <nav class="nav" aria-label="Navigation principale">
       <a href="/" class="logo" aria-label={t.nav.home}>
         <Logo size={20} />
-        <span class="serif">Nitid</span>
+        <span class="serif wide-inline">Nitid</span>
       </a>
       <div class="nav__right">
         <div class="nav__links">
@@ -30,8 +30,10 @@ const { t } = Astro.props;
 
     <div class="hero__body">
       <h1 class="serif hero__title">
-        <span class="l1">{t.hero.line1}</span>
-        <span class="l2">{t.hero.line2a} <span class="nacre">{t.hero.line2b}</span></span>
+        <span class="wide">
+          <span class="l1">{t.hero.line1}</span>
+          <span class="l2">{t.hero.line2a} <span class="nacre">{t.hero.line2b}</span></span>
+        </span>
       </h1>
 
       <div class="hero__row">
@@ -129,8 +131,10 @@ const { t } = Astro.props;
     text-decoration: none;
   }
   .logo .serif {
-    font-size: 28px;
-    letter-spacing: 0.05em;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    /* place pour les 20 % d'élargissement */
+    margin-right: 0.5em;
   }
   .nav__right {
     display: flex;
@@ -165,7 +169,7 @@ const { t } = Astro.props;
       font-size: 13px;
     }
     .logo .serif {
-      font-size: 24px;
+      font-size: 26px;
     }
   }
 
@@ -176,16 +180,18 @@ const { t } = Astro.props;
   }
   .hero__title {
     margin: 0;
-    font-size: clamp(46px, 8vw, 128px);
-    line-height: 0.96;
-    letter-spacing: -0.02em;
+    font-size: clamp(48px, 8.4vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
     text-shadow: var(--title-shadow);
   }
-  .hero__title > span {
+  .hero__title .l1,
+  .hero__title .l2 {
     display: block;
   }
   .hero__title .l2 {
-    padding-left: clamp(0px, 13vw, 210px);
+    /* retrait mesuré avant l'élargissement de 20 % : 10.8vw × 1.2 ≈ 13vw à l'écran */
+    padding-left: clamp(0px, 10.8vw, 175px);
   }
   .nacre {
     font-style: italic;

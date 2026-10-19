@@ -4,7 +4,7 @@ const { t } = Astro.props;
 
 <section class="section deliver" aria-labelledby="recevez-titre">
   <div class="wrap deliver__inner">
-    <h2 id="recevez-titre" class="serif h2" data-reveal>{t.deliver.title}</h2>
+    <h2 id="recevez-titre" class="serif h2" data-reveal><span class="wide">{t.deliver.title}</span></h2>
     <ul class="grid">
       {
         t.deliver.items.map((it: { t: string; d: string }, i: number) => (

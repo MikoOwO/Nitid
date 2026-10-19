@@ -4,13 +4,13 @@ const { t } = Astro.props;
 
 <section id="realisations" class="section work" aria-labelledby="realisations-titre">
   <div class="wrap work__inner">
-    <h2 id="realisations-titre" class="serif h2" data-reveal>{t.work.title}</h2>
+    <h2 id="realisations-titre" class="serif h2" data-reveal><span class="wide">{t.work.title}</span></h2>
     <ul class="work__list">
       {
         t.work.items.map((it: { name: string; url: string; d: string }) => (
           <li data-reveal>
             <a href={it.url} target="_blank" rel="noopener">
-              <span class="work__name serif">{it.name}</span>
+              <span class="work__name serif"><span class="wide">{it.name}</span></span>
               <span class="work__desc">{it.d}</span>
               <span class="work__go" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square">

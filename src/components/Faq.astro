@@ -4,7 +4,7 @@ const { t } = Astro.props;
 
 <section id="questions" class="section faq" aria-labelledby="questions-titre">
   <div class="wrap faq__inner">
-    <h2 id="questions-titre" class="serif h2" data-reveal>{t.faq.title}</h2>
+    <h2 id="questions-titre" class="serif h2" data-reveal><span class="wide">{t.faq.title}</span></h2>
     <div class="faq__list" data-reveal>
       {
         t.faq.items.map((it: { q: string; a: string }) => (

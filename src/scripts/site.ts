@@ -1,5 +1,5 @@
 // Nitid — interactions légères, sans librairie (≈ 3 Ko).
-// Thème, lumière du titre, loupe, apparitions au scroll, formulaire.
+// Thème, lumière du titre, démo « le plan qui devient site », apparitions au scroll, formulaire.
 
 declare global {
   interface Window {

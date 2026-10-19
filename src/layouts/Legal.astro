@@ -10,8 +10,8 @@ const { title } = Astro.props;
 
 <Base lang="fr" title={`${title} · Nitid`} description={`${title} du site nitid.ch.`}>
   <main id="main" class="legal wrap">
-    <a href="/" class="legal__home"><Logo size={18} /><span class="serif">Nitid</span></a>
-    <h1 class="serif">{title}</h1>
+    <a href="/" class="legal__home"><Logo size={18} /><span class="serif wide-inline">Nitid</span></a>
+    <h1 class="serif"><span class="wide">{title}</span></h1>
     <div class="legal__body"><slot /></div>
   </main>
 </Base>
@@ -27,7 +27,11 @@ const { title } = Astro.props;
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 26px;
+  }
+  .legal__home .serif {
+    /* place pour les 20 % d'élargissement */
+    margin-right: 0.5em;
   }
   h1 {
     margin: 72px 0 32px;
