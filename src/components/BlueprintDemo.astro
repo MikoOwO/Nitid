@@ -1,0 +1,612 @@
+---
+// Démonstration signature : le site daté d'une menuiserie fictive devient un plan d'architecte,
+// puis le plan se remplit et devient le nouveau site. Phases pilotées par data-phase (old → plan → site).
+interface Props {
+  label: string;
+  phases: string[];
+  replay: string;
+  caption: string;
+  fictional: string;
+}
+const { label, phases, replay, caption, fictional } = Astro.props;
+---
+
+<figure class="demo">
+  <div class="frame">
+    <div class="frame__bar">
+      <div class="frame__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="frame__url">menuiserie-lorin.ch</div>
+    </div>
+
+    <div class="bp" id="demo-bp" data-bp data-phase="site" role="img" aria-label={label}>
+      <!-- 01 · Avant : site daté, flou -->
+      <div class="old" aria-hidden="true">
+        <div class="old__head">
+          <div class="old__brand">MENUISERIE LORIN</div>
+          <div class="old__tagline">Menuiserie - Ébénisterie - Escaliers - Cuisines</div>
+        </div>
+        <div class="old__nav"><span>Accueil</span><span>|</span><span>Nos réalisations</span><span>|</span><span>Devis</span><span>|</span><span>Plan d’accès</span></div>
+        <div class="old__body">
+          <div class="old__side">
+            <div class="old__side-title">Liens utiles</div>
+            <div class="old__link">» Nos horaires</div>
+            <div class="old__link">» Livre d’or</div>
+            <div class="old__link">» Contactez-nous</div>
+          </div>
+          <div class="old__main">
+            <div class="old__h">Bienvenue !</div>
+            <div class="old__p">La Menuiserie Lorin vous accueille depuis 1987. Nous réalisons tous travaux de menuiserie et d’ébénisterie. N’hésitez pas à nous contacter pour un devis gratuit !!</div>
+            <div class="old__img">photo_atelier_2008.jpg</div>
+          </div>
+        </div>
+        <div class="old__foot">© 2009 Menuiserie Lorin - Site optimisé pour Internet Explorer 6 en 1024x768</div>
+      </div>
+
+      <!-- 02 · Plan : papier bleu, grille, boîtes tracées, cotes -->
+      <div class="plan" aria-hidden="true">
+        <div class="paper"></div>
+        <div class="site__bg"></div>
+
+        <span class="box" style="left:4cqw;top:3.1cqw;width:10cqw;height:3.4cqw;--d:.95s"></span>
+        <span class="box" style="left:69cqw;top:3.5cqw;width:27cqw;height:2.6cqw;--d:1.05s"></span>
+
+        <span class="box" style="left:4cqw;top:13cqw;width:46cqw;height:12.6cqw;--d:1.2s">
+          <i class="bar" style="top:1.3cqw;width:92%;height:4.2cqw;--d:1.7s"></i>
+          <i class="bar" style="top:7.5cqw;width:70%;height:4.2cqw;--d:1.85s"></i>
+        </span>
+        <span class="box" style="left:4cqw;top:28.4cqw;width:34cqw;height:5.6cqw;--d:1.4s">
+          <i class="bar bar--thin" style="top:1cqw;width:96%;--d:2s"></i>
+          <i class="bar bar--thin" style="top:3.6cqw;width:74%;--d:2.1s"></i>
+        </span>
+        <span class="box box--pill" style="left:4cqw;top:37.4cqw;width:19.5cqw;height:4.4cqw;--d:1.55s"><b class="lbl lbl--center" style="--d:2.4s">CTA</b></span>
+
+        <span class="box box--img" style="left:55cqw;top:11cqw;width:41cqw;height:47.5cqw;--d:1.3s">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0L100 100M100 0L0 100" vector-effect="non-scaling-stroke"></path></svg>
+          <b class="lbl lbl--center" style="--d:2.5s">IMG · 4:5</b>
+        </span>
+
+        <span class="dim" style="left:55cqw;top:8cqw;width:41cqw;--d:2.2s"><b>560 px</b></span>
+        <b class="lbl" style="left:4cqw;top:10.4cqw;--d:2.3s">H1 · 72 px</b>
+        <b class="lbl" style="left:39.4cqw;top:29.2cqw;--d:2.45s">P · 18 px</b>
+        <b class="lbl" style="left:4cqw;top:52.6cqw;--d:2.6s">GRILLE 12 COL · 24 px</b>
+        <b class="lbl lbl--right" style="right:4cqw;bottom:1.4cqw;--d:2.7s">MAQUETTE V1 · 1440 × 900</b>
+        <div class="scan"></div>
+      </div>
+
+      <!-- 03 · Site : la nouvelle version -->
+      <div class="site" aria-hidden="true">
+        <div class="s s-brand" style="--d:.35s">Lorin</div>
+        <div class="s s-links" style="--d:.45s"><span>Réalisations</span><span>Savoir-faire</span><span>Devis</span></div>
+        <div class="s s-h1" style="--d:.55s">Le bois, travaillé au millimètre.</div>
+        <div class="s s-p" style="--d:.75s">Escaliers, cuisines et agencements sur mesure, depuis 1987.</div>
+        <div class="s s-btn" style="--d:.9s">Demander un devis</div>
+        <div class="s s-meta" style="--d:1.05s">Morges · Atelier depuis 1987</div>
+        <div class="s-wood" style="--d:.25s"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="ctrl__tabs" role="group" aria-label={label}>
+      {
+        phases.map((p, i) => (
+          <button type="button" data-go={['old', 'plan', 'site'][i]} aria-controls="demo-bp" aria-pressed={i === 2 ? 'true' : 'false'}>
+            <span class="ctrl__n">0{i + 1}</span>
+            {p}
+          </button>
+        ))
+      }
+    </div>
+    <button type="button" class="ctrl__replay" data-replay>
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"></path></svg>
+      {replay}
+    </button>
+  </div>
+  <figcaption>
+    <span>{caption}</span>
+    <span>{fictional}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .demo {
+    flex: 1.4 1 520px;
+    min-width: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .frame {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--frame-bg);
+    box-shadow: var(--frame-shadow);
+  }
+  .frame__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--frame-bg);
+    border-bottom: 1px solid var(--frame-line);
+  }
+  .frame__dots {
+    display: flex;
+    gap: 6px;
+  }
+  .frame__dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--frame-dot);
+  }
+  .frame__url {
+    flex: 1;
+    min-width: 0;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--frame-url-bg);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bp {
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --line: rgba(150, 196, 255, 0.92);
+    position: relative;
+    aspect-ratio: 16 / 10;
+    max-width: 100%;
+    container-type: inline-size;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  /* ---------- 01 · Avant ---------- */
+  .old {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    color: #333333;
+    font-family: Verdana, Geneva, sans-serif;
+    font-weight: 400;
+    line-height: 1.3;
+    filter: blur(0.16cqw);
+  }
+  .old__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6cqw;
+    padding: 2.2cqw 3cqw;
+    background: linear-gradient(180deg, #6c9bd2 0%, #2f5f98 100%);
+    border-bottom: 0.5cqw solid #f2c94c;
+  }
+  .old__brand {
+    font-family: 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive;
+    font-size: 4.4cqw;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    text-shadow: 0.25cqw 0.25cqw 0 #1c3a5e;
+  }
+  .old__tagline {
+    font-size: 1.7cqw;
+    color: #fff6c8;
+  }
+  .old__nav {
+    display: flex;
+    gap: 1.6cqw;
+    padding: 1cqw 3cqw;
+    background: #dce6f1;
+    border-bottom: 0.15cqw solid #9fb4cf;
+    font-size: 1.6cqw;
+    color: #0033cc;
+    text-decoration: underline;
+  }
+  .old__body {
+    flex: 1;
+    display: flex;
+    gap: 2.4cqw;
+    padding: 2.4cqw 3cqw;
+  }
+  .old__side {
+    flex: none;
+    width: 20cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8cqw;
+    padding: 1.4cqw;
+    background: #efefef;
+    border: 0.15cqw solid #cccccc;
+    font-size: 1.5cqw;
+  }
+  .old__side-title {
+    font-weight: 700;
+    color: #993300;
+  }
+  .old__link {
+    color: #0033cc;
+    text-decoration: underline;
+  }
+  .old__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2cqw;
+  }
+  .old__h {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3.2cqw;
+    font-weight: 700;
+    color: #993300;
+  }
+  .old__p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.9cqw;
+    line-height: 1.35;
+    color: #444444;
+  }
+  .old__img {
+    height: 13cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    border: 0.2cqw dashed #aaaaaa;
+    font-size: 1.5cqw;
+    color: #888888;
+  }
+  .old__foot {
+    padding: 1cqw 3cqw;
+    border-top: 0.15cqw solid #dddddd;
+    font-size: 1.25cqw;
+    color: #888888;
+    text-align: center;
+  }
+
+  /* ---------- 02 · Plan ---------- */
+  .plan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .paper {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(120, 170, 255, 0.16) 1px, transparent 1px) 0 0 / 10cqw 10cqw,
+      linear-gradient(90deg, rgba(120, 170, 255, 0.16) 1px, transparent 1px) 0 0 / 10cqw 10cqw,
+      linear-gradient(rgba(120, 170, 255, 0.07) 1px, transparent 1px) 0 0 / 2.5cqw 2.5cqw,
+      linear-gradient(90deg, rgba(120, 170, 255, 0.07) 1px, transparent 1px) 0 0 / 2.5cqw 2.5cqw,
+      radial-gradient(ellipse 80% 70% at 30% 20%, #133070 0%, #0b1f4d 60%, #081739 100%);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.5s ease;
+  }
+  .scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: #cfe9ff;
+    box-shadow: 0 0 1.2cqw 0.3cqw rgba(140, 200, 255, 0.85), 0 0 6cqw 1.5cqw rgba(90, 150, 255, 0.35);
+    opacity: 0;
+  }
+  .box {
+    position: absolute;
+    border: 1px solid var(--line);
+    clip-path: inset(0 100% 100% 0);
+    opacity: 1;
+    transition: clip-path 0.3s ease, opacity 0.4s ease;
+  }
+  .box--pill {
+    border-radius: 999px;
+    border-style: dashed;
+  }
+  .box--img svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: rgba(150, 196, 255, 0.45);
+    stroke-width: 1;
+  }
+  .bar {
+    position: absolute;
+    left: 2.5%;
+    height: 1cqw;
+    background: rgba(150, 196, 255, 0.22);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s ease;
+  }
+  .bar--thin {
+    height: 1cqw;
+  }
+  .dim {
+    position: absolute;
+    height: 1.4cqw;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .dim::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--line);
+  }
+  .dim b {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 1cqw;
+    background: #0d2252;
+    font: 500 1.15cqw/1 var(--mono);
+    letter-spacing: 0.08em;
+    color: #cfe4ff;
+  }
+  .lbl {
+    position: absolute;
+    font: 500 1.15cqw/1 var(--mono);
+    letter-spacing: 0.1em;
+    color: #9fc8ff;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .lbl--center {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Entrée du plan : papier balayé par la ligne de scan, puis tracé des boîtes. */
+  @keyframes scan {
+    0% {
+      top: 0;
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  .bp[data-phase='plan'] .scan {
+    animation: scan 1.1s cubic-bezier(0.55, 0, 0.35, 1) both;
+  }
+  .bp[data-phase='plan'] .paper {
+    animation: wipe 1.1s cubic-bezier(0.55, 0, 0.35, 1) both;
+  }
+  .bp[data-phase='site'] .paper {
+    clip-path: inset(0);
+    transition: none;
+  }
+  .bp[data-phase='plan'] .box {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 0.9s var(--ease) var(--d);
+  }
+  .bp[data-phase='plan'] .bar,
+  .bp[data-phase='plan'] .dim {
+    transform: none;
+    transition: transform 0.7s var(--ease) var(--d);
+  }
+  .bp[data-phase='plan'] .lbl {
+    opacity: 1;
+    transition: opacity 0.6s ease var(--d);
+  }
+  /* Pendant le site, les traits restent un instant puis s'effacent. */
+  .bp[data-phase='site'] .box,
+  .bp[data-phase='site'] .lbl,
+  .bp[data-phase='site'] .dim {
+    clip-path: inset(0);
+    opacity: 0;
+    transform: none;
+    transition: opacity 0.9s ease 0.9s;
+  }
+  .bp[data-phase='site'] .bar {
+    transform: none;
+  }
+
+  /* ---------- 03 · Site ---------- */
+  .site {
+    position: absolute;
+    inset: 0;
+    color: #f2e8da;
+    font-family: 'Jost Variable', 'Jost', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+  .site__bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 85% 20%, rgba(214, 170, 120, 0.18), rgba(0, 0, 0, 0) 60%), #1f160f;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .s {
+    position: absolute;
+    opacity: 0;
+    filter: blur(0.8cqw);
+    transform: translateY(1cqw);
+    transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  }
+  .s-brand {
+    left: 4cqw;
+    top: 3.1cqw;
+    font-family: 'Bodoni Moda Variable', Georgia, serif;
+    font-size: 2.8cqw;
+    line-height: 1.2;
+  }
+  .s-links {
+    right: 4cqw;
+    top: 3.9cqw;
+    display: flex;
+    gap: 2.4cqw;
+    font-size: 1.45cqw;
+    color: #cdbba6;
+  }
+  .s-h1 {
+    left: 4cqw;
+    top: 13cqw;
+    width: 46cqw;
+    font-family: 'Bodoni Moda Variable', Georgia, serif;
+    font-size: 5.8cqw;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+  }
+  .s-p {
+    left: 4cqw;
+    top: 28.4cqw;
+    width: 34cqw;
+    font-size: 1.75cqw;
+    line-height: 1.5;
+    color: #cdbba6;
+  }
+  .s-btn {
+    left: 4cqw;
+    top: 37.4cqw;
+    padding: 1.2cqw 2.4cqw;
+    border-radius: 999px;
+    background: #ebd9bf;
+    color: #1f160f;
+    font-size: 1.55cqw;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .s-meta {
+    left: 4cqw;
+    top: 52.4cqw;
+    padding-top: 1cqw;
+    border-top: 1px solid rgba(235, 217, 191, 0.25);
+    font-size: 1.25cqw;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #cdbba6;
+  }
+  .s-wood {
+    position: absolute;
+    left: 55cqw;
+    top: 11cqw;
+    width: 41cqw;
+    height: 47.5cqw;
+    border-radius: 1.2cqw;
+    background:
+      radial-gradient(ellipse 3.5cqw 6cqw at 32% 62%, rgba(46, 24, 10, 0.6), rgba(46, 24, 10, 0) 70%),
+      radial-gradient(ellipse 2.5cqw 4cqw at 70% 25%, rgba(46, 24, 10, 0.45), rgba(46, 24, 10, 0) 70%),
+      repeating-linear-gradient(91deg, rgba(0, 0, 0, 0.13) 0, rgba(0, 0, 0, 0.13) 0.22cqw, rgba(0, 0, 0, 0) 0.22cqw, rgba(0, 0, 0, 0) 1.4cqw),
+      repeating-linear-gradient(88deg, rgba(255, 235, 205, 0.06) 0, rgba(255, 235, 205, 0.06) 0.12cqw, rgba(0, 0, 0, 0) 0.12cqw, rgba(0, 0, 0, 0) 2.3cqw),
+      linear-gradient(160deg, #9a6a41 0%, #6e4528 55%, #4e3019 100%);
+    clip-path: inset(100% 0 0 0 round 1.2cqw);
+    transition: clip-path 0.3s ease;
+  }
+  .bp[data-phase='site'] .site__bg {
+    opacity: 1;
+    transition: opacity 0.9s ease;
+  }
+  .bp[data-phase='site'] .s {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: opacity 0.9s ease var(--d), filter 0.9s ease var(--d), transform 1s var(--ease) var(--d);
+  }
+  .bp[data-phase='site'] .s-wood {
+    clip-path: inset(0 0 0 0 round 1.2cqw);
+    transition: clip-path 1.3s var(--ease) var(--d);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp *,
+    .bp *::before {
+      animation: none !important;
+      transition: none !important;
+    }
+    .bp[data-phase='plan'] .paper {
+      clip-path: inset(0);
+    }
+  }
+
+  /* ---------- Commandes ---------- */
+  .ctrl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+  }
+  .ctrl__tabs {
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .ctrl button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .ctrl button:hover {
+    color: var(--fg);
+  }
+  .ctrl__tabs button[aria-pressed='true'] {
+    background: var(--pill-bg);
+    color: var(--fg);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+  .ctrl__n {
+    font: 500 11px/1 ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    letter-spacing: 0.08em;
+    color: var(--tag);
+  }
+  .ctrl__replay {
+    padding: 0 6px;
+  }
+
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 16px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+</style>
