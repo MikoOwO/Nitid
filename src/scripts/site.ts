@@ -90,7 +90,7 @@ function stopDemo() {
   demoTimers = [];
 }
 
-// Avant (1,3 s) → plan tracé (≈ 4 s) → site.
+// Avant (0,6 s) → plan tracé (≈ 2,2 s) → site. Rejoue à chaque retour dans l'écran.
 function playDemo() {
   if (!bp) return;
   stopDemo();
@@ -99,8 +99,8 @@ function playDemo() {
     return;
   }
   setPhase('old');
-  demoTimers.push(window.setTimeout(() => setPhase('plan'), 1300));
-  demoTimers.push(window.setTimeout(() => setPhase('site'), 5400));
+  demoTimers.push(window.setTimeout(() => setPhase('plan'), 600));
+  demoTimers.push(window.setTimeout(() => setPhase('site'), 2800));
 }
 
 if (bp) {
@@ -150,8 +150,6 @@ if (reduceMotion || !('IntersectionObserver' in window)) {
         if (i >= 0) {
           for (let j = 0; j <= i; j += 1) seen[j] = true;
           pump();
-        } else if (el === bp) {
-          playDemo();
         } else {
           el.classList.add('is-in');
         }
@@ -161,7 +159,24 @@ if (reduceMotion || !('IntersectionObserver' in window)) {
   );
   document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
   steps.forEach((el) => io.observe(el));
-  if (bp) io.observe(bp);
+
+  // La démo se lance seule dès qu'elle est visible, et rejoue quand on y revient.
+  if (bp) {
+    let visible = false;
+    new IntersectionObserver(
+      ([en]) => {
+        if (en.isIntersecting && !visible) {
+          visible = true;
+          playDemo();
+        } else if (!en.isIntersecting && visible) {
+          visible = false;
+          stopDemo();
+          setPhase('site');
+        }
+      },
+      { threshold: 0.35 },
+    ).observe(bp);
+  }
 }
 
 /* ---------- Formulaire ---------- */
